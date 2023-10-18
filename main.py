@@ -17,7 +17,6 @@ texts = []
 if uploaded_file is not None:
     # st.json({'FileName': uploaded_file.name, 'FileType': uploaded_file.type, 'FileSize': uploaded_file.size})
     upload_binary = BytesIO(uploaded_file.getvalue())
-    st.write(upload_binary)
     file_flag = True
         
 col1, col2 = st.columns(2)
@@ -25,12 +24,13 @@ col1, col2 = st.columns(2)
 with col1:
     start = st.button("文字起こしスタート")
     if start and file_flag:
+        placeholder_result = st.empty()
         with st.spinner('モデルの読込...'):
             # model_size = "large-v2"
             model_size = "medium"
-            model = WhisperModel(model_size, device="cpu", compute_type="int8")
-            st.success('モデルの読込完了')
-            st.toast('モデルの読込完了')
+            # model = WhisperModel(model_size, device="cpu", compute_type="int8")
+            model = WhisperModel(model_size, device="cuda", compute_type="int8")
+            placeholder_result.success('モデルの読込完了')
         
         with st.spinner('文字起こし中...'):
 
@@ -45,7 +45,7 @@ with col1:
                     st.write(out)
                     texts.append(out)
                 else:
-                    st.success('Done!')
+                    placeholder_result.success('文字起こし完了')
                     download_flag = True
     else:
         pass
