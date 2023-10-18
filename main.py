@@ -1,6 +1,7 @@
 from faster_whisper import WhisperModel
 import streamlit as st
 import datetime
+from io import BytesIO
 
 st.markdown(
     '''
@@ -15,6 +16,8 @@ texts = []
 
 if uploaded_file is not None:
     # st.json({'FileName': uploaded_file.name, 'FileType': uploaded_file.type, 'FileSize': uploaded_file.size})
+    upload_binary = BytesIO(uploaded_file.getvalue())
+    st.write(upload_binary)
     file_flag = True
         
 col1, col2 = st.columns(2)
@@ -31,7 +34,7 @@ with col1:
         
         with st.spinner('文字起こし中...'):
 
-            segments, info = model.transcribe(uploaded_file.name, beam_size=5, vad_filter=True)
+            segments, info = model.transcribe(upload_binary, beam_size=5, vad_filter=True)
 
             print("Detected language '%s' with probability %f" % (info.language, info.language_probability))
             
