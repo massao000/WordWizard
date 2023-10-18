@@ -23,7 +23,8 @@ with col1:
     start = st.button("文字起こしスタート")
     if start and file_flag:
         with st.spinner('モデルの読込...'):
-            model_size = "large-v2"
+            # model_size = "large-v2"
+            model_size = "medium"
             model = WhisperModel(model_size, device="cpu", compute_type="int8")
             st.success('モデルの読込完了')
             st.toast('モデルの読込完了')
