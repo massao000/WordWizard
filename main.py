@@ -26,8 +26,8 @@ with col1:
     if start and file_flag:
         placeholder_result = st.empty()
         with st.spinner('モデルの読込...'):
-            # model_size = "large-v2"
-            model_size = "medium"
+            model_size = "large-v2"
+            # model_size = "medium"
             model = WhisperModel(model_size, device="cpu", compute_type="int8")
             # model = WhisperModel(model_size, device="cuda", compute_type="int8")
             placeholder_result.success('モデルの読込完了')
