@@ -40,6 +40,7 @@ download_flag = False
 texts = []
 
 device = "cuda" if torch.cuda.is_available() else "cpu"
+print(device)
 
 if uploaded_file is not None:
     # st.json({'filename': uploaded_file.name, 'filetype': uploaded_file.type, 'filesize': uploaded_file.size})
