@@ -32,7 +32,7 @@ st.markdown(
     ''')
 
 uploaded_file = st.file_uploader("音声ファイル", type=["mp4", "mp3", "wav"])
-on = st.toggle("動画または音声の再生")
+# on = st.toggle("動画または音声の再生")
 
 file_flag = False
 download_flag = False
@@ -41,11 +41,11 @@ texts = []
 if uploaded_file is not None:
     # st.json({'filename': uploaded_file.name, 'filetype': uploaded_file.type, 'filesize': uploaded_file.size})
     upload_bytes = BytesIO(uploaded_file.getvalue())
-    if on:
-        if "mp4" in uploaded_file.name:
-            st.video(upload_bytes)
-        else:
-            st.audio(upload_bytes)
+    # if on:
+    if "mp4" in uploaded_file.name:
+        st.video(upload_bytes)
+    else:
+        st.audio(upload_bytes)
     file_flag = True
         
 col1, col2 = st.columns(2)
