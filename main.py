@@ -3,7 +3,6 @@ import streamlit as st
 import datetime
 from io import BytesIO
 import math
-import torch
 
 def disassembly(seconds):
     minutes = int(seconds // 60)
@@ -38,9 +37,6 @@ uploaded_file = st.file_uploader("音声ファイル", type=["mp4", "mp3", "wav"
 file_flag = False
 download_flag = False
 texts = []
-
-device = "cuda" if torch.cuda.is_available() else "cpu"
-st.text(f'デバイスは{device}です')
 
 if uploaded_file is not None:
     # st.json({'filename': uploaded_file.name, 'filetype': uploaded_file.type, 'filesize': uploaded_file.size})
