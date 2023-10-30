@@ -2,6 +2,18 @@ from faster_whisper import WhisperModel
 import streamlit as st
 import datetime
 from io import BytesIO
+import math
+
+def disassembly(seconds):
+    minutes = int(seconds // 60)
+    seconds = math.ceil(seconds % 60)
+    # 秒が60になる場合、分を増やし秒を0にリセット
+    if seconds == 60:
+        minutes += 1
+        seconds = 0
+        
+    print(f"{minutes}分 {seconds}秒")
+    return str(minutes).zfill(2), str(seconds).zfill(2)
 
 st.set_page_config(
     page_title="Word Wizard App",
@@ -44,9 +56,9 @@ with col1:
         # placeholder_result = st.empty()
         container = st.container()
         with st.spinner('モデルの読込...'):
-            # model_size = "large-v2"
-            model_size = "medium"
+            model_size = "sironano/faster-whisper-large-v2-int8_float16"
             model = WhisperModel(model_size, device="cpu", compute_type="int8")
+            # model = WhisperModel(model_size, device="cuda", compute_type="int8")
             # placeholder_result.success('モデルの読込完了')
             container.success('モデルの読込完了')
         
@@ -59,7 +71,12 @@ with col1:
             placeholder = st.empty()
             with placeholder.container():
                 for segment in segments:
-                    out = f"[{segment.start:.2f}s -> {segment.end:.2f}s] {segment.text}"
+                    # out = f"[{segment.start:.2f}s -> {segment.end:.2f}s] {segment.text}"
+                    
+                    minutes_start, seconds_start = disassembly(segment.start)
+                    minutes_end, seconds_end = disassembly(segment.end)
+                    out = f"[{minutes_start}分{seconds_start}秒 -> {minutes_end}分{seconds_end}秒] {segment.text}"
+                    
                     st.write(out)
                     texts.append(out)
                 else:
@@ -72,11 +89,11 @@ with col1:
 with col2:
     if download_flag:
         now = datetime.datetime.now().strftime('%Y%m%d%H%M%S')
-        title = st.text_input("保存ファイル名", now)
-        st.write("保存ファイル名が無ければ、日時名になります")
+        # title = st.text_input("保存ファイル名", now)
+        st.write("保存ファイル名は日時になります")
         
         text = "\n".join(texts)
-        download_two = st.download_button("ダウンロード", text, f"{title}.txt")
+        download_two = st.download_button("ダウンロード", text, f"{now}.txt")
     else:
         st.info("文字起こしが完了するとダウンロードボタンが出現します")
         
